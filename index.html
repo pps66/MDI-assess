@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แบบประเมินพ่นยา (MDI)</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal: #1D9E75; --teal-dark: #0F6E56; --teal-deep: #085041;
+    --teal-light: #E1F5EE; --teal-mid: #9FE1CB;
+    --red-light: #FCEBEB; --red-mid: #A32D2D; --red-dark: #791F1F;
+    --amber-light: #FAEEDA; --amber-dark: #633806;
+    --gray-bg: #F7F7F5; --card-bg: #fff;
+    --border: rgba(0,0,0,.1); --border-mid: rgba(0,0,0,.18);
+    --text: #1a1a1a; --text-muted: #6b6b68; --text-hint: #9a9a97;
+    --radius: 10px; --radius-sm: 6px; --radius-pill: 99px;
+  }
+  body { font-family: 'Sarabun', sans-serif; font-size: 15px; color: var(--text); background: var(--gray-bg); min-height: 100vh; }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
+  header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; }
+  .logo { width: 38px; height: 38px; background: var(--teal); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; }
+  .logo svg { width: 22px; height: 22px; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  header h1 { font-size: 17px; font-weight: 600; }
+  header p { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+  .tab-bar { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem; }
+  .tab { padding: 9px 20px; font-family: 'Sarabun', sans-serif; font-size: 14px; font-weight: 500; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; color: var(--text-muted); transition: all .15s; }
+  .tab.active { color: var(--teal-dark); border-bottom-color: var(--teal); }
+  .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: .875rem; }
+  .section-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 10px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 13px; color: var(--text-muted); }
+  .field input { font-family: 'Sarabun', sans-serif; font-size: 14px; padding: 7px 10px; border: 1px solid var(--border-mid); border-radius: var(--radius-sm); background: #fff; color: var(--text); width: 100%; transition: border-color .12s, box-shadow .12s; }
+  .field input:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(29,158,117,.12); }
+  .checklist-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .checklist-item:last-of-type { border-bottom: none; }
+  .item-num { font-size: 11px; font-weight: 600; color: var(--teal); min-width: 18px; padding-top: 3px; }
+  .item-text { flex: 1; font-size: 14px; line-height: 1.55; }
+  .radio-group { display: flex; gap: 5px; flex-shrink: 0; padding-top: 1px; }
+  .radio-btn { font-family: 'Sarabun', sans-serif; font-size: 13px; padding: 4px 13px; border: 1px solid var(--border-mid); border-radius: var(--radius-pill); cursor: pointer; background: none; color: var(--text-muted); transition: all .12s; white-space: nowrap; }
+  .radio-btn:hover { border-color: #888; }
+  .radio-btn.do.selected { background: var(--teal-light); border-color: var(--teal); color: var(--teal-deep); font-weight: 500; }
+  .radio-btn.dont.selected { background: var(--red-light); border-color: #E24B4A; color: var(--red-mid); font-weight: 500; }
+  .score-bar-wrap { margin: 14px 0 4px; }
+  .score-bar-bg { height: 6px; background: #eee; border-radius: var(--radius-pill); overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: var(--radius-pill); background: var(--teal); transition: width .3s ease; }
+  .score-label { font-size: 13px; color: var(--text-muted); margin-top: 5px; }
+  .submit-btn { width: 100%; padding: 11px; font-family: 'Sarabun', sans-serif; font-size: 15px; font-weight: 500; background: var(--teal); color: #fff; border: none; border-radius: var(--radius-sm); cursor: pointer; transition: background .12s; }
+  .submit-btn:hover:not(:disabled) { background: var(--teal-dark); }
+  .submit-btn:disabled { background: #ccc; color: #999; cursor: not-allowed; }
+  .date-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  .nav-btn { font-family: 'Sarabun', sans-serif; font-size: 13px; padding: 5px 12px; border: 1px solid var(--border-mid); border-radius: var(--radius-sm); background: #fff; cursor: pointer; color: var(--text-muted); transition: background .12s; }
+  .nav-btn:hover:not(:disabled) { background: var(--gray-bg); }
+  .nav-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .date-label { font-size: 14px; font-weight: 500; }
+  .metric-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1rem; }
+  .metric { background: var(--gray-bg); border-radius: var(--radius-sm); padding: 12px; text-align: center; }
+  .metric .val { font-size: 22px; font-weight: 600; color: var(--text); }
+  .metric .lbl { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+  .record-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .record-row:last-child { border-bottom: none; }
+  .record-info { flex: 1; min-width: 0; }
+  .record-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .record-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+  .badge { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: var(--radius-pill); min-width: 50px; text-align: center; }
+  .badge.hi { background: var(--teal-light); color: var(--teal-deep); }
+  .badge.mid { background: var(--amber-light); color: var(--amber-dark); }
+  .badge.lo { background: var(--red-light); color: var(--red-dark); }
+  .expand-btn, .delete-btn { background: none; border: none; cursor: pointer; font-size: 13px; padding: 4px 6px; border-radius: 4px; color: var(--text-muted); transition: background .12s; }
+  .expand-btn:hover, .delete-btn:hover { background: var(--gray-bg); }
+  .delete-btn:hover { color: var(--red-mid); }
+  .detail-panel { background: var(--gray-bg); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 6px; }
+  .detail-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13px; padding: 7px 12px; border-bottom: 1px solid var(--border); }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-row .ok { color: var(--teal-dark); font-weight: 500; }
+  .detail-row .ng { color: var(--red-mid); font-weight: 500; }
+  .worst-bar-bg { height: 5px; background: #e5e5e5; border-radius: var(--radius-pill); overflow: hidden; flex: 1; }
+  .worst-bar-fill { height: 100%; background: var(--teal); border-radius: var(--radius-pill); }
+  .empty { text-align: center; padding: 2.5rem; color: var(--text-muted); font-size: 14px; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(8px); background: var(--teal-deep); color: var(--teal-light); padding: 9px 22px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 500; opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; z-index: 999; white-space: nowrap; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  @media (max-width: 480px) {
+    .field-row { grid-template-columns: 1fr; }
+    .metric-row { grid-template-columns: repeat(3,1fr); }
+    .metric .val { font-size: 18px; }
+    .radio-btn { padding: 4px 9px; font-size: 12px; }
+  }
+  @media print {
+    body { background: #fff; }
+    .tab-bar, .nav-btn, .expand-btn, .delete-btn, .submit-btn { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+    </div>
+    <div>
+      <h1>แบบประเมินพ่นยา (MDI)</h1>
+      <p>Metered-dose Inhaler Assessment</p>
+    </div>
+  </header>
+
+  <div class="tab-bar">
+    <button class="tab active" id="tab-form" onclick="showTab('form')">บันทึกการประเมิน</button>
+    <button class="tab" id="tab-summary" onclick="showTab('summary')">สรุปรายวัน</button>
+  </div>
+
+  <div id="view-form"></div>
+  <div id="view-summary" style="display:none"></div>
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+const ITEMS = [
+  "เปิดฝาครอบออก เขย่าขวดยาให้ยากระจายตัวดี",
+  "หายใจออกจนสุด (ถ้ามีเสมหะให้เอาเสมหะออกก่อน)",
+  "ตั้งหลอดยาขึ้น ใช้ริมฝีปากอมปากกระบอกให้สนิท เอนศีรษะไปด้านหลังเล็กน้อย",
+  "หายใจเข้าทางปากช้าๆ ลึกๆ พร้อมกดพ่นยา 1 ครั้ง",
+  "ไม่มีควันออกจากปากและจมูกขณะพ่นยา เอากระบอกพ่นยาออกและหุบปากให้สนิท",
+  "กลั้นหายใจไว้อย่างน้อย 10 วินาที หรือนานที่สุดเท่าที่จะทำได้",
+  "หายใจออกทางจมูกช้าๆ",
+  "หากต้องการพ่นยาซ้ำ ควรเว้นระยะห่างจากครั้งแรกประมาณ 1 นาที",
+  "กรณีพ่นยาสูดสเตียรอยด์ให้บ้วนปากด้วยน้ำสะอาด หรือแปรงฟันหลังพ่นยาทุกครั้ง",
+  "ทำความสะอาดด้วยน้ำ เช็ดให้แห้ง และเก็บ/ทำลายยาถูกวิธี (คืนห้องยา / ห้ามเผา / ห้ามทุบทำลาย)"
+];
+
+let scores = new Array(10).fill(null);
+let viewDate = todayStr();
+let expandedId = null;
+
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function formatDate(s) {
+  const [y,m,d] = s.split('-').map(Number);
+  const months = ['','ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  return `${d} ${months[m]} ${y+543}`;
+}
+
+function storageKey(d) { return 'mdi_assess_' + d; }
+
+function loadRecords(d) {
+  try { return JSON.parse(localStorage.getItem(storageKey(d)) || '[]'); } catch { return []; }
+}
+
+function saveRecords(d, r) {
+  localStorage.setItem(storageKey(d), JSON.stringify(r));
+}
+
+function scoreClass(s) { return s >= 8 ? 'hi' : s >= 5 ? 'mid' : 'lo'; }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+function setScore(i, v) {
+  scores[i] = v;
+  renderForm();
+}
+
+function answered() { return scores.filter(s => s !== null).length; }
+function totalScore() { return scores.filter(s => s === true).length; }
+
+function renderForm() {
+  const ans = answered(), sc = totalScore(), pct = Math.round(sc/10*100), full = ans === 10;
+  let h = `<div class="card" style="margin-bottom:.75rem">
+    <div class="section-label">ข้อมูลผู้ป่วย</div>
+    <div class="field-row">
+      <div class="field"><label>HN</label><input id="hn" type="text" placeholder="เลขทะเบียน"></div>
+      <div class="field"><label>อายุ (ปี)</label><input id="age" type="number" placeholder="อายุ" min="1"></div>
+    </div>
+    <div class="field"><label>ชื่อ-นามสกุล</label><input id="pname" type="text" placeholder="ชื่อผู้ป่วย"></div>
+  </div>
+  <div class="card">
+    <div class="section-label">รายการประเมินการพ่นยา (${ans}/10)</div>`;
+
+  ITEMS.forEach((item, i) => {
+    h += `<div class="checklist-item">
+      <span class="item-num">${i+1}</span>
+      <span class="item-text">${item}</span>
+      <div class="radio-group">
+        <button class="radio-btn do${scores[i]===true?' selected':''}" onclick="setScore(${i},true)">ทำ</button>
+        <button class="radio-btn dont${scores[i]===false?' selected':''}" onclick="setScore(${i},false)">ไม่ทำ</button>
+      </div>
+    </div>`;
+  });
+
+  h += `<div class="score-bar-wrap">
+    <div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%"></div></div>
+    <div class="score-label">ทำถูกต้อง <strong>${sc}/10</strong> ข้อ${full ? '' : ` · ยังไม่ตอบอีก ${10-ans} ข้อ`}</div>
+  </div></div>
+  <button class="submit-btn" onclick="submitForm()" ${!full?'disabled':''}>
+    ${full ? 'บันทึกคะแนน' : `กรุณาตอบให้ครบทุกข้อ`}
+  </button>`;
+
+  document.getElementById('view-form').innerHTML = h;
+}
+
+function submitForm() {
+  if (answered() < 10) return;
+  const hn = document.getElementById('hn').value.trim();
+  const pname = document.getElementById('pname').value.trim();
+  const age = document.getElementById('age').value.trim();
+  const now = new Date();
+  const record = {
+    id: now.getTime(),
+    hn: hn || '-', name: pname || '-', age: age || '-',
+    scores: [...scores], total: totalScore(),
+    time: now.toLocaleTimeString('th-TH', {hour:'2-digit', minute:'2-digit'})
+  };
+  const today = todayStr();
+  const list = loadRecords(today);
+  list.push(record);
+  saveRecords(today, list);
+  scores = new Array(10).fill(null);
+  renderForm();
+  showToast(`✓ บันทึกแล้ว — ${record.name !== '-' ? record.name : 'HN '+record.hn} ได้ ${record.total}/10 คะแนน`);
+}
+
+function renderSummary() {
+  const records = loadRecords(viewDate);
+  const isToday = viewDate === todayStr();
+  const n = records.length;
+  const avg = n > 0 ? records.reduce((s,r) => s+r.total, 0) / n : 0;
+  const perfect = records.filter(r => r.total === 10).length;
+
+  let h = `<div class="date-nav">
+    <button class="nav-btn" onclick="changeDate(-1)">← วันก่อน</button>
+    <span class="date-label">${formatDate(viewDate)}${isToday ? ' (วันนี้)' : ''}</span>
+    <button class="nav-btn" onclick="changeDate(1)" ${isToday?'disabled':''}>วันถัดไป →</button>
+  </div>
+  <div class="metric-row">
+    <div class="metric"><div class="val">${n}</div><div class="lbl">ราย</div></div>
+    <div class="metric"><div class="val">${n ? avg.toFixed(1) : '-'}</div><div class="lbl">คะแนนเฉลี่ย</div></div>
+    <div class="metric"><div class="val">${perfect}</div><div class="lbl">ได้ 10/10</div></div>
+  </div>`;
+
+  if (!n) {
+    h += `<div class="empty">ยังไม่มีการบันทึกในวันนี้</div>`;
+  } else {
+    h += `<div class="card">`;
+    records.slice().reverse().forEach(r => {
+      const exp = expandedId === r.id;
+      h += `<div class="record-row">
+        <div class="record-info">
+          <div class="record-name">${r.name}${r.age !== '-' ? ` (${r.age} ปี)` : ''}</div>
+          <div class="record-sub">HN: ${r.hn} · ${r.time}</div>
+        </div>
+        <span class="badge ${scoreClass(r.total)}">${r.total}/10</span>
+        <button class="expand-btn" onclick="toggleExpand(${r.id})" title="${exp?'ซ่อน':'ดูรายละเอียด'}">${exp ? '▲' : '▼'}</button>
+        <button class="delete-btn" onclick="deleteRecord(${r.id})" title="ลบ">🗑</button>
+      </div>`;
+      if (exp) {
+        h += `<div class="detail-panel">`;
+        ITEMS.forEach((item, i) => {
+          const ok = r.scores[i];
+          h += `<div class="detail-row">
+            <span style="flex:1">${i+1}. ${item}</span>
+            <span class="${ok?'ok':'ng'}">${ok ? '✓ ทำ' : '✗ ไม่ทำ'}</span>
+          </div>`;
+        });
+        h += `</div>`;
+      }
+    });
+    h += `</div>`;
+
+    const passRate = ITEMS.map((_,i) => ({i, pct: Math.round(records.filter(r=>r.scores[i]).length/n*100)}))
+      .sort((a,b) => a.pct - b.pct).slice(0, 3);
+    h += `<div class="card" style="margin-top:.5rem">
+      <div class="section-label">ข้อที่ทำผิดบ่อยที่สุด</div>`;
+    passRate.forEach(w => {
+      h += `<div style="margin-bottom:12px">
+        <div style="font-size:13px;margin-bottom:5px;line-height:1.4">${w.i+1}. ${ITEMS[w.i]}</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="worst-bar-bg"><div class="worst-bar-fill" style="width:${w.pct}%"></div></div>
+          <span style="font-size:12px;color:var(--text-muted);min-width:52px">ทำได้ ${w.pct}%</span>
+        </div>
+      </div>`;
+    });
+    h += `</div>`;
+
+    h += `<div style="text-align:right;margin-top:.5rem">
+      <button class="nav-btn" onclick="exportCSV()">⬇ Export CSV</button>
+    </div>`;
+  }
+
+  document.getElementById('view-summary').innerHTML = h;
+}
+
+function toggleExpand(id) { expandedId = expandedId === id ? null : id; renderSummary(); }
+
+function deleteRecord(id) {
+  if (!confirm('ต้องการลบรายการนี้?')) return;
+  const list = loadRecords(viewDate).filter(r => r.id !== id);
+  saveRecords(viewDate, list);
+  expandedId = null;
+  renderSummary();
+  showToast('ลบรายการแล้ว');
+}
+
+function changeDate(d) {
+  const dt = new Date(viewDate); dt.setDate(dt.getDate() + d);
+  const s = dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0');
+  if (s > todayStr()) return;
+  viewDate = s; expandedId = null; renderSummary();
+}
+
+function exportCSV() {
+  const records = loadRecords(viewDate);
+  if (!records.length) return;
+  const header = ['วันที่','เวลา','HN','ชื่อ','อายุ','คะแนน'].concat(ITEMS.map((_,i)=>`ข้อ${i+1}`));
+  const rows = records.map(r => [
+    viewDate, r.time, r.hn, r.name, r.age, r.total,
+    ...r.scores.map(s => s ? '1' : '0')
+  ]);
+  const csv = '\uFEFF' + [header, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+  a.download = `mdi_assessment_${viewDate}.csv`;
+  a.click();
+}
+
+function showTab(tab) {
+  document.getElementById('tab-form').className = 'tab' + (tab==='form'?' active':'');
+  document.getElementById('tab-summary').className = 'tab' + (tab==='summary'?' active':'');
+  document.getElementById('view-form').style.display = tab==='form' ? '' : 'none';
+  document.getElementById('view-summary').style.display = tab==='summary' ? '' : 'none';
+  if (tab === 'summary') renderSummary();
+}
+
+renderForm();
+</script>
+</body>
+</html>
