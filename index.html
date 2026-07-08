@@ -343,14 +343,6 @@ function renderAssess(){
 
   // ── นัดครั้งถัดไป และปุ่มบันทึก (แสดงเมื่อเลือกผู้ป่วยแล้ว) ──
   if(selPatient){
-    const defNext=addMonths(todayISO(),1);
-    h+=`<div class="card">
-      <div class="section-label">นัดประเมินครั้งถัดไป</div>
-      <div class="field" style="margin-bottom:0">
-        <label>วันที่นัด</label>
-        <input type="date" id="nxt" value="${defNext}" min="${addDays(todayISO(),1)}">
-      </div>
-    </div>`;
     h+=`<button class="submit-btn" onclick="submitAssess()" ${!full?'disabled':''}>
       ${full?'บันทึกการประเมิน':`กรุณาตอบให้ครบทุกข้อ (เหลือ ${10-ans} ข้อ)`}
     </button>`;
@@ -389,17 +381,16 @@ function addPatient(){
 
 function submitAssess(){
   if(!selPatient||answered()<10)return;
-  const nextDate=document.getElementById('nxt').value||addMonths(todayISO(),1);
   const now=new Date();
   const visit={
     id:'v'+Date.now(),patientId:selPatient.id,
     date:todayISO(),time:now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}),
-    scores:[...scores],total:totalScore(),pct:Math.round(totalScore()*10),nextDate
+    scores:[...scores],total:totalScore(),pct:Math.round(totalScore()*10)
   };
   const visits=getVisits();visits.push(visit);saveVisits(visits);
   const name=selPatient.name;
   clearPatient();
-  showToast(`✓ บันทึกแล้ว — ${name} ได้ ${visit.total}/10 (${visit.pct}%) · นัดถัดไป ${fmtDate(nextDate)}`);
+  showToast(`✓ บันทึกแล้ว — ${name} ได้ ${visit.total}/10 (${visit.pct}%)`);
 }
 
 // ══════════════════════════════════════════════════════════════
