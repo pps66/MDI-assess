@@ -24,6 +24,9 @@ header{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem}
 .logo svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 header h1{font-size:17px;font-weight:600}
 header p{font-size:12px;color:var(--text-muted);margin-top:1px}
+.conn-badge{font-size:11px;padding:3px 8px;border-radius:var(--radius-pill);font-weight:500;margin-left:auto}
+.conn-badge.online{background:var(--teal-light);color:var(--teal-deep)}
+.conn-badge.offline{background:var(--amber-light);color:var(--amber-dark)}
 .tab-bar{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.25rem;overflow-x:auto}
 .tab{padding:9px 16px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:500;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;color:var(--text-muted);transition:all .15s;white-space:nowrap}
 .tab.active{color:var(--teal-dark);border-bottom-color:var(--teal)}
@@ -35,7 +38,6 @@ header p{font-size:12px;color:var(--text-muted);margin-top:1px}
 .field label{font-size:13px;color:var(--text-muted)}
 .field input,.field select{font-family:'Sarabun',sans-serif;font-size:14px;padding:7px 10px;border:1px solid var(--border-mid);border-radius:var(--radius-sm);background:#fff;color:var(--text);width:100%;transition:border-color .12s,box-shadow .12s}
 .field input:focus,.field select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(29,158,117,.12)}
-/* search dropdown */
 .search-wrap{position:relative}
 .search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-muted);line-height:1;padding:0}
 .dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid var(--border-mid);border-radius:var(--radius-sm);z-index:50;max-height:200px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,.1)}
@@ -43,18 +45,14 @@ header p{font-size:12px;color:var(--text-muted);margin-top:1px}
 .dd-item:last-child{border-bottom:none}
 .dd-item:hover{background:var(--gray-bg)}
 .dd-item .sub{font-size:12px;color:var(--text-muted);margin-top:2px}
-/* patient chip */
 .patient-chip{background:var(--teal-light);border:1px solid rgba(29,158,117,.3);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .patient-chip .info{font-size:14px;font-weight:600;color:var(--teal-deep)}
 .patient-chip .sub{font-size:12px;color:var(--teal-dark);margin-top:2px}
 .patient-chip .clear-btn{background:none;border:none;cursor:pointer;font-size:20px;color:var(--teal-dark);line-height:1;flex-shrink:0}
-/* divider */
 .or-divider{display:flex;align-items:center;gap:8px;margin:10px 0}
 .or-divider hr{flex:1;border:none;border-top:1px solid var(--border)}
 .or-divider span{font-size:12px;color:var(--text-muted)}
-/* toggle link */
 .toggle-link{font-family:'Sarabun',sans-serif;font-size:13px;color:var(--teal-dark);background:none;border:none;cursor:pointer;text-decoration:underline;padding:0}
-/* checklist */
 .checklist-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
 .checklist-item:last-of-type{border-bottom:none}
 .item-num{font-size:11px;font-weight:600;color:var(--teal);min-width:18px;padding-top:3px}
@@ -64,26 +62,22 @@ header p{font-size:12px;color:var(--text-muted);margin-top:1px}
 .radio-btn:hover{border-color:#888}
 .radio-btn.do.selected{background:var(--teal-light);border-color:var(--teal);color:var(--teal-deep);font-weight:500}
 .radio-btn.dont.selected{background:var(--red-light);border-color:#E24B4A;color:var(--red-mid);font-weight:500}
-/* score bar */
 .score-bar-wrap{margin:14px 0 4px}
 .score-bar-bg{height:6px;background:#eee;border-radius:var(--radius-pill);overflow:hidden}
 .score-bar-fill{height:100%;border-radius:var(--radius-pill);background:var(--teal);transition:width .3s ease}
 .score-label{font-size:13px;color:var(--text-muted);margin-top:5px}
-/* buttons */
 .submit-btn{width:100%;padding:11px;font-family:'Sarabun',sans-serif;font-size:15px;font-weight:500;background:var(--teal);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;transition:background .12s}
 .submit-btn:hover:not(:disabled){background:var(--teal-dark)}
 .submit-btn:disabled{background:#ccc;color:#999;cursor:not-allowed}
 .nav-btn{font-family:'Sarabun',sans-serif;font-size:13px;padding:5px 12px;border:1px solid var(--border-mid);border-radius:var(--radius-sm);background:#fff;cursor:pointer;color:var(--text-muted);transition:background .12s}
 .nav-btn:hover:not(:disabled){background:var(--gray-bg)}
 .nav-btn:disabled{opacity:.35;cursor:not-allowed}
-/* metric */
 .date-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
 .date-label{font-size:14px;font-weight:500}
 .metric-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem}
 .metric{background:var(--gray-bg);border-radius:var(--radius-sm);padding:10px 8px;text-align:center}
 .metric .val{font-size:20px;font-weight:600;color:var(--text)}
 .metric .lbl{font-size:11px;color:var(--text-muted);margin-top:3px;line-height:1.3}
-/* records */
 .record-row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--border)}
 .record-row:last-child{border-bottom:none}
 .record-info{flex:1;min-width:0}
@@ -97,17 +91,15 @@ header p{font-size:12px;color:var(--text-muted);margin-top:1px}
 .icon-btn{background:none;border:none;cursor:pointer;font-size:13px;padding:4px 6px;border-radius:4px;color:var(--text-muted);transition:background .12s}
 .icon-btn:hover{background:var(--gray-bg)}
 .icon-btn.red:hover{color:var(--red-mid)}
-/* detail panel */
 .detail-panel{background:var(--gray-bg);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:6px}
 .detail-row{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;padding:7px 12px;border-bottom:1px solid var(--border)}
 .detail-row:last-child{border-bottom:none}
 .ok{color:var(--teal-dark);font-weight:500}
 .ng{color:var(--red-mid);font-weight:500}
-/* worst bar */
 .worst-bar-bg{height:5px;background:#e5e5e5;border-radius:var(--radius-pill);overflow:hidden;flex:1}
 .worst-bar-fill{height:100%;background:var(--teal);border-radius:var(--radius-pill)}
 .empty{text-align:center;padding:2.5rem;color:var(--text-muted);font-size:14px}
-/* history timeline */
+.loading{text-align:center;padding:2rem;color:var(--text-muted);font-size:14px}
 .timeline{border-left:2px solid var(--teal-light);padding-left:1rem;margin-top:8px}
 .tl-item{position:relative;padding-bottom:14px}
 .tl-item:last-child{padding-bottom:0}
@@ -116,7 +108,15 @@ header p{font-size:12px;color:var(--text-muted);margin-top:1px}
 .tl-score{font-size:14px;font-weight:500}
 .tl-items{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px}
 .tl-dot{font-size:11px;padding:2px 6px;border-radius:var(--radius-pill)}
-/* toast & modal */
+.alert{border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:10px;font-size:13px}
+.alert.due{background:var(--teal-light);color:var(--teal-deep);border:1px solid rgba(29,158,117,.3)}
+.alert.overdue{background:var(--red-light);color:var(--red-mid);border:1px solid rgba(226,75,74,.3)}
+/* setup screen */
+.setup-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem}
+.setup-card h2{font-size:16px;font-weight:600;margin-bottom:.5rem}
+.setup-card p{font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:10px}
+.setup-card ol{padding-left:1.2rem;font-size:13px;color:var(--text-muted);line-height:1.8}
+.setup-card code{background:var(--gray-bg);padding:2px 6px;border-radius:4px;font-size:12px;color:var(--text)}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--teal-deep);color:var(--teal-light);padding:9px 22px;border-radius:var(--radius-pill);font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:999;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 #modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center}
@@ -126,17 +126,12 @@ header p{font-size:12px;color:var(--text-muted);margin-top:1px}
 .modal-actions button{flex:1;font-family:'Sarabun',sans-serif;font-size:14px;padding:9px;border-radius:6px;cursor:pointer;font-weight:500}
 .modal-cancel{border:1px solid var(--border-mid);background:#fff;color:var(--text-muted)}
 .modal-confirm{border:none;background:var(--red-mid);color:#fff}
-/* alert box */
-.alert{border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:10px;font-size:13px}
-.alert.due{background:var(--teal-light);color:var(--teal-deep);border:1px solid rgba(29,158,117,.3)}
-.alert.overdue{background:var(--red-light);color:var(--red-mid);border:1px solid rgba(226,75,74,.3)}
 @media(max-width:480px){
   .field-row{grid-template-columns:1fr}
   .metric-row{grid-template-columns:repeat(2,1fr)}
   .metric .val{font-size:18px}
   .radio-btn{padding:4px 9px;font-size:12px}
 }
-@media print{body{background:#fff}.tab-bar,.nav-btn,.icon-btn,.submit-btn{display:none}}
 </style>
 </head>
 <body>
@@ -149,6 +144,7 @@ header p{font-size:12px;color:var(--text-muted);margin-top:1px}
       <h1>แบบประเมินพ่นยา (MDI)</h1>
       <p>Metered-dose Inhaler Assessment</p>
     </div>
+    <span id="conn-badge" class="conn-badge offline">⏳ กำลังเชื่อมต่อ</span>
   </header>
 
   <div class="tab-bar">
@@ -173,7 +169,27 @@ header p{font-size:12px;color:var(--text-muted);margin-top:1px}
   </div>
 </div>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 <script>
+// ╔══════════════════════════════════════════════════════════╗
+// ║  ⚙️  วาง Firebase Config ที่นี่                         ║
+// ║  ดูวิธีตั้งค่าในแท็บ "ประวัติผู้ป่วย"                  ║
+// ╚══════════════════════════════════════════════════════════╝
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBowDY6_K5INpVOjvhImDitftX0GnXHvgo",
+  authDomain: "mdi-assess.firebaseapp.com",
+  databaseURL: "https://mdi-assess-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "mdi-assess",
+  storageBucket: "mdi-assess.firebasestorage.app",
+  messagingSenderId: "1050906512605",
+  appId: "1:1050906512605:web:5e4ba33260d37cebc11f34",
+  measurementId: "G-KGP750QP7N"
+};
+// ════════════════════════════════════════════════════════════
+
 const ITEMS=[
   "เปิดฝาครอบออก เขย่าขวดยาให้ยากระจายตัวดี",
   "หายใจออกจนสุด (ถ้ามีเสมหะให้เอาเสมหะออกก่อน)",
@@ -188,98 +204,114 @@ const ITEMS=[
 ];
 const MO=['','ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
 
-// ── storage ──────────────────────────────────────────────────
-function load(k,d){try{return JSON.parse(localStorage.getItem(k)||'null')||d}catch{return d}}
-function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
-function getPatients(){return load('mdi_patients',[])}
-function savePatients(v){save('mdi_patients',v)}
-function getVisits(){return load('mdi_visits',[])}
-function saveVisits(v){save('mdi_visits',v)}
+// ── Firebase / storage layer ─────────────────────────────
+let _db=null, _useFirebase=false;
 
-// ── date ─────────────────────────────────────────────────────
-function todayISO(){
-  const d=new Date();
-  return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+function initFirebase(){
+  if(!FIREBASE_CONFIG.databaseURL){
+    setBadge(false); return;
+  }
+  try{
+    if(!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    _db=firebase.database();
+    _useFirebase=true;
+    setBadge(true);
+  }catch(e){
+    console.error('Firebase error:',e);
+    setBadge(false);
+  }
 }
+
+function setBadge(online){
+  const b=document.getElementById('conn-badge');
+  if(online){b.textContent='☁️ Cloud';b.className='conn-badge online';}
+  else{b.textContent='💾 Local';b.className='conn-badge offline';}
+}
+
+// localStorage fallback
+function lsLoad(k,d){try{return JSON.parse(localStorage.getItem(k)||'null')||d}catch{return d}}
+function lsSave(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+
+async function getPatients(){
+  if(_useFirebase){
+    try{
+      const s=await _db.ref('patients').get();
+      if(!s.exists())return[];
+      return Object.values(s.val()).sort((a,b)=>a.createdAt.localeCompare(b.createdAt));
+    }catch(e){console.error(e)}
+  }
+  return lsLoad('mdi_patients',[]);
+}
+async function savePatients(arr){
+  lsSave('mdi_patients',arr);
+  if(_useFirebase){
+    try{
+      const obj=arr.length?Object.fromEntries(arr.map(p=>[p.id,p])):null;
+      await _db.ref('patients').set(obj);
+    }catch(e){console.error(e);showToast('⚠️ บันทึก Cloud ไม่สำเร็จ ลองใหม่');}
+  }
+}
+async function getVisits(){
+  if(_useFirebase){
+    try{
+      const s=await _db.ref('visits').get();
+      if(!s.exists())return[];
+      return Object.values(s.val()).sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time));
+    }catch(e){console.error(e)}
+  }
+  return lsLoad('mdi_visits',[]);
+}
+async function saveVisits(arr){
+  lsSave('mdi_visits',arr);
+  if(_useFirebase){
+    try{
+      const obj=arr.length?Object.fromEntries(arr.map(v=>[v.id,v])):null;
+      await _db.ref('visits').set(obj);
+    }catch(e){console.error(e);showToast('⚠️ บันทึก Cloud ไม่สำเร็จ ลองใหม่');}
+  }
+}
+
+// ── date helpers ─────────────────────────────────────────
+function todayISO(){const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
 function pad(n){return String(n).padStart(2,'0')}
-function fmtDate(s){
-  if(!s)return'-';
-  const[y,m,d]=s.split('-').map(Number);
-  return `${d} ${MO[m]} ${y+543}`;
-}
-function addDays(iso,n){
-  const d=new Date(iso);d.setDate(d.getDate()+n);
-  return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-}
-function addMonths(iso,n){
-  const d=new Date(iso);d.setMonth(d.getMonth()+n);
-  return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-}
+function fmtDate(s){if(!s)return'-';const[y,m,d]=s.split('-').map(Number);return`${d} ${MO[m]} ${y+543}`}
 
-// ── state ─────────────────────────────────────────────────────
+// ── ui state ──────────────────────────────────────────────
 let scores=new Array(10).fill(null);
-let selPatient=null;
-let showNewForm=false;
-let searchQ='';
-let viewDate=todayISO();
-let expVisit=null;
-let expPatient=null;
-let dbQ='';
+let selPatient=null, showNewForm=false, searchQ='';
+let viewDate=todayISO(), expVisit=null, expPatient=null, dbQ='';
 let _mcb=null;
 
-// ── modal / toast ────────────────────────────────────────────
-function showModal(msg,cb){
-  _mcb=cb;
-  document.getElementById('modal-msg').textContent=msg;
-  document.getElementById('modal-overlay').style.display='flex';
-}
-function modalConfirm(){
-  document.getElementById('modal-overlay').style.display='none';
-  if(_mcb)_mcb();_mcb=null;
-}
-function modalCancel(){
-  document.getElementById('modal-overlay').style.display='none';_mcb=null;
-}
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2600);
-}
+function showModal(msg,cb){_mcb=cb;document.getElementById('modal-msg').textContent=msg;document.getElementById('modal-overlay').style.display='flex'}
+function modalConfirm(){document.getElementById('modal-overlay').style.display='none';if(_mcb)_mcb();_mcb=null}
+function modalCancel(){document.getElementById('modal-overlay').style.display='none';_mcb=null}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
+function setLoading(id){document.getElementById(id).innerHTML='<div class="loading">⏳ กำลังโหลด...</div>'}
 
-// ── helpers ───────────────────────────────────────────────────
 function answered(){return scores.filter(s=>s!==null).length}
 function totalScore(){return scores.filter(s=>s===true).length}
-function sc(s){return s>=8?'hi':s>=5?'mid':'lo'}
+function scClass(s){return s>=8?'hi':s>=5?'mid':'lo'}
 function setScore(i,v){scores[i]=v;renderAssess()}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
-// ── patientVisits helpers ─────────────────────────────────────
-function patientVisits(pid){
-  return getVisits().filter(v=>v.patientId===pid).sort((a,b)=>a.date.localeCompare(b.date));
-}
-function lastVisit(pid){const v=patientVisits(pid);return v.length?v[v.length-1]:null}
+// ── patient helpers ───────────────────────────────────────
+function pvs(visits,pid){return visits.filter(v=>v.patientId===pid).sort((a,b)=>a.date.localeCompare(b.date))}
+function lastV(visits,pid){const v=pvs(visits,pid);return v.length?v[v.length-1]:null}
 
-function nextStatus(pid){
-  const lv=lastVisit(pid);
-  if(!lv||!lv.nextDate)return null;
-  if(lv.nextDate<todayISO())return'overdue';
-  if(lv.nextDate===todayISO())return'today';
-  return'ok';
-}
-
-// ══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // TAB 1 — บันทึกการประเมิน
-// ══════════════════════════════════════════════════════════════
-function renderAssess(){
+// ══════════════════════════════════════════════════════════
+async function renderAssess(){
+  const patients=await getPatients();
   const ans=answered(),sc2=totalScore(),pct=Math.round(sc2/10*100),full=ans===10;
-  const patients=getPatients();
   const filtered=searchQ.length>=1
     ?patients.filter(p=>p.hn.toLowerCase().includes(searchQ.toLowerCase())||p.name.toLowerCase().includes(searchQ.toLowerCase()))
     :[];
   let h='';
 
-  // ── ส่วนผู้ป่วย (ค้นหา หรือ chip) ──────────────────────────
+  // ── patient select / chip ──────────────────────────────
   if(!selPatient){
+    const visits=await getVisits();
     h+=`<div class="card" style="margin-bottom:.75rem">
       <div class="section-label">ค้นหาผู้ป่วยเดิม</div>
       <div class="search-wrap">
@@ -289,11 +321,11 @@ function renderAssess(){
         ${searchQ?`<button class="search-clear" onclick="searchQ='';renderAssess()">×</button>`:''}
         ${filtered.length?`<div class="dropdown">
           ${filtered.map(p=>{
-            const lv=lastVisit(p.id);
-            const vs=patientVisits(p.id).length;
+            const lv=lastV(visits,p.id);
+            const vc=pvs(visits,p.id).length;
             return`<div class="dd-item" onclick="pickPatient('${p.id}')">
               <strong>${esc(p.name)}</strong> — HN: ${esc(p.hn)}
-              <div class="sub">อายุ ${p.age} ปี · ประเมินมาแล้ว ${vs} ครั้ง${lv?` · ล่าสุด ${fmtDate(lv.date)}`:''}${lv&&lv.nextDate?` · นัดถัดไป ${fmtDate(lv.nextDate)}`:''}</div>
+              <div class="sub">อายุ ${p.age} ปี · ประเมิน ${vc} ครั้ง${lv?` · ล่าสุด ${fmtDate(lv.date)}`:''}</div>
             </div>`;
           }).join('')}
         </div>`:''}
@@ -312,18 +344,19 @@ function renderAssess(){
       </div>`:''}
     </div>`;
   } else {
-    const vs=patientVisits(selPatient.id);
-    const lv=vs.length?vs[vs.length-1]:null;
+    const visits=await getVisits();
+    const vpList=pvs(visits,selPatient.id);
+    const lv=vpList.length?vpList[vpList.length-1]:null;
     h+=`<div class="patient-chip" style="margin-bottom:.75rem">
       <div>
         <div class="info">${esc(selPatient.name)} — HN: ${esc(selPatient.hn)}</div>
-        <div class="sub">อายุ ${selPatient.age} ปี · ประเมินมาแล้ว ${vs.length} ครั้ง${lv?` · ครั้งล่าสุด ${fmtDate(lv.date)}`:''}${lv&&lv.nextDate?` · นัดถัดไป ${fmtDate(lv.nextDate)}`:''}</div>
+        <div class="sub">อายุ ${selPatient.age} ปี · ประเมินมาแล้ว ${vpList.length} ครั้ง${lv?` · ครั้งล่าสุด ${fmtDate(lv.date)}`:''}</div>
       </div>
       <button class="clear-btn" onclick="clearPatient()">×</button>
     </div>`;
   }
 
-  // ── checklist (แสดงเสมอ) ─────────────────────────────────
+  // ── checklist (แสดงเสมอ) ────────────────────────────
   h+=`<div class="card">
     <div class="section-label">รายการประเมินการพ่นยา (${ans}/10)</div>`;
   ITEMS.forEach((item,i)=>{
@@ -341,7 +374,6 @@ function renderAssess(){
     <div class="score-label">ทำถูกต้อง <strong>${sc2}/10</strong> ข้อ (${pct}%)${full?'':` · ยังไม่ตอบอีก ${10-ans} ข้อ`}</div>
   </div></div>`;
 
-  // ── นัดครั้งถัดไป และปุ่มบันทึก (แสดงเมื่อเลือกผู้ป่วยแล้ว) ──
   if(selPatient){
     h+=`<button class="submit-btn" onclick="submitAssess()" ${!full?'disabled':''}>
       ${full?'บันทึกการประเมิน':`กรุณาตอบให้ครบทุกข้อ (เหลือ ${10-ans} ข้อ)`}
@@ -353,33 +385,31 @@ function renderAssess(){
   }
 
   document.getElementById('view-assess').innerHTML=h;
-  if(!selPatient&&searchQ){
-    const inp=document.getElementById('sq');
-    if(inp){inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length)}
-  }
+  if(!selPatient&&searchQ){const inp=document.getElementById('sq');if(inp){inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length)}}
 }
 
-function pickPatient(id){
-  const p=getPatients().find(x=>x.id===id);
-  if(!p)return;
+async function pickPatient(id){
+  const patients=await getPatients();
+  const p=patients.find(x=>x.id===id);if(!p)return;
   selPatient=p;searchQ='';showNewForm=false;scores=new Array(10).fill(null);
   renderAssess();
 }
 function clearPatient(){selPatient=null;scores=new Array(10).fill(null);renderAssess()}
 
-function addPatient(){
+async function addPatient(){
   const hn=(document.getElementById('nhn').value||'').trim();
   const name=(document.getElementById('nname').value||'').trim();
   const age=(document.getElementById('nage').value||'').trim();
   if(!hn||!name||!age){showToast('กรุณากรอก HN, ชื่อ และอายุ');return}
-  const pts=getPatients();
-  if(pts.find(p=>p.hn===hn)){showToast('HN นี้มีในระบบแล้ว — ค้นหาได้เลย');return}
+  const patients=await getPatients();
+  if(patients.find(p=>p.hn===hn)){showToast('HN นี้มีในระบบแล้ว — ค้นหาได้เลย');return}
   const p={id:'p'+Date.now(),hn,name,age:parseInt(age),createdAt:todayISO()};
-  pts.push(p);savePatients(pts);
-  pickPatient(p.id);showToast(`เพิ่มผู้ป่วยใหม่: ${name}`);
+  await savePatients([...patients,p]);
+  selPatient=p;searchQ='';showNewForm=false;scores=new Array(10).fill(null);
+  renderAssess();showToast(`เพิ่มผู้ป่วยใหม่: ${name}`);
 }
 
-function submitAssess(){
+async function submitAssess(){
   if(!selPatient||answered()<10)return;
   const now=new Date();
   const visit={
@@ -387,26 +417,45 @@ function submitAssess(){
     date:todayISO(),time:now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}),
     scores:[...scores],total:totalScore(),pct:Math.round(totalScore()*10)
   };
-  const visits=getVisits();visits.push(visit);saveVisits(visits);
+  const visits=await getVisits();
+  await saveVisits([...visits,visit]);
   const name=selPatient.name;
   clearPatient();
   showToast(`✓ บันทึกแล้ว — ${name} ได้ ${visit.total}/10 (${visit.pct}%)`);
 }
 
-// ══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // TAB 2 — ประวัติผู้ป่วย
-// ══════════════════════════════════════════════════════════════
-function renderPatients(){
-  const patients=getPatients();
-  const visits=getVisits();
+// ══════════════════════════════════════════════════════════
+async function renderPatients(){
+  setLoading('view-patients');
+  const patients=await getPatients();
+  const visits=await getVisits();
   const q=dbQ.toLowerCase();
   const list=q?patients.filter(p=>p.hn.toLowerCase().includes(q)||p.name.toLowerCase().includes(q)):patients;
 
-  // due today / overdue alerts
-  const dueToday=patients.filter(p=>nextStatus(p.id)==='today');
-  const overdue=patients.filter(p=>nextStatus(p.id)==='overdue');
+  const firebase_ok=_useFirebase;
 
-  let h=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem">
+  // setup guide if no firebase
+  let h='';
+  if(!firebase_ok){
+    h+=`<div class="setup-card" style="border-color:var(--amber-dark);background:var(--amber-light)">
+      <h2>⚙️ ตั้งค่า Firebase เพื่อให้ข้อมูลไม่หาย</h2>
+      <p>ขณะนี้ข้อมูลเก็บใน browser นี้เท่านั้น ทำตามขั้นตอนนี้ครั้งเดียวเพื่อเก็บข้อมูลบน Cloud ฟรี:</p>
+      <ol>
+        <li>ไปที่ <strong>console.firebase.google.com</strong> → Sign in ด้วย Google</li>
+        <li>กด <strong>Create a project</strong> → ตั้งชื่อ → Continue → Enable Analytics: ไม่ → Create project</li>
+        <li>กด <strong>Realtime Database</strong> (เมนูซ้าย) → Create database → เลือก location ใดก็ได้ → <strong>Start in test mode</strong> → Enable</li>
+        <li>กด ⚙️ <strong>Project settings</strong> (มุมซ้ายบน) → แถบ General → เลื่อนลง → กด <strong>&lt;/&gt;</strong> (Web) → ตั้งชื่อ → Register app</li>
+        <li>คัดลอก <code>firebaseConfig</code> ที่ได้ → เปิดไฟล์ <code>index.html</code> ด้วย Notepad → วางค่าในส่วน <code>FIREBASE_CONFIG</code> → Save → อัปโหลดทับ GitHub</li>
+      </ol>
+    </div>`;
+  }
+
+  const dueToday=patients.filter(p=>{const lv=lastV(visits,p.id);return lv&&lv.nextDate===todayISO()});
+  const overdue=patients.filter(p=>{const lv=lastV(visits,p.id);return lv&&lv.nextDate<todayISO()});
+
+  h+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem">
     <div class="search-wrap" style="flex:1">
       <input type="text" placeholder="ค้นหา HN หรือชื่อ..." value="${esc(dbQ)}"
         oninput="dbQ=this.value;renderPatients()" style="width:100%;padding-right:32px">
@@ -415,47 +464,36 @@ function renderPatients(){
     <span style="font-size:13px;color:var(--text-muted);white-space:nowrap">${patients.length} ราย</span>
   </div>`;
 
-  if(dueToday.length)
-    h+=`<div class="alert due">📅 นัดประเมินวันนี้ ${dueToday.length} ราย: ${dueToday.map(p=>p.name).join(', ')}</div>`;
-  if(overdue.length)
-    h+=`<div class="alert overdue">⚠️ เลยกำหนดนัด ${overdue.length} ราย: ${overdue.map(p=>p.name).join(', ')}</div>`;
+  if(dueToday.length) h+=`<div class="alert due">📅 นัดประเมินวันนี้ ${dueToday.length} ราย: ${dueToday.map(p=>p.name).join(', ')}</div>`;
+  if(overdue.length) h+=`<div class="alert overdue">⚠️ เลยกำหนดนัด ${overdue.length} ราย: ${overdue.map(p=>p.name).join(', ')}</div>`;
 
   if(!list.length){
     h+=`<div class="empty">${patients.length?'ไม่พบผู้ป่วยที่ค้นหา':'ยังไม่มีข้อมูลผู้ป่วย'}</div>`;
   } else {
     h+=`<div class="card">`;
     list.forEach(p=>{
-      const pvs=patientVisits(p.id);
-      const lv=pvs.length?pvs[pvs.length-1]:null;
+      const pvsArr=pvs(visits,p.id);
+      const lv=pvsArr.length?pvsArr[pvsArr.length-1]:null;
       const exp=expPatient===p.id;
-      const ns=nextStatus(p.id);
-      const nextBadge=lv&&lv.nextDate
-        ?`<span class="badge ${ns==='overdue'?'lo':ns==='today'?'info':'hi'}" style="font-size:11px">${ns==='overdue'?'เลยนัด':ns==='today'?'นัดวันนี้':fmtDate(lv.nextDate)}</span>`
-        :'';
       h+=`<div class="record-row">
         <div class="record-info">
           <div class="record-name">${esc(p.name)}</div>
-          <div class="record-sub">HN: ${esc(p.hn)} · อายุ ${p.age} ปี · ประเมิน ${pvs.length} ครั้ง</div>
+          <div class="record-sub">HN: ${esc(p.hn)} · อายุ ${p.age} ปี · ประเมิน ${pvsArr.length} ครั้ง</div>
         </div>
-        ${lv?`<span class="badge ${sc(lv.total)}">${lv.pct}%</span>`:``}
-        ${nextBadge}
+        ${lv?`<span class="badge ${scClass(lv.total)}">${lv.pct}%</span>`:''}
         <button class="icon-btn" onclick="expPatient=expPatient==='${p.id}'?null:'${p.id}';renderPatients()">${exp?'▲':'▼'}</button>
         <button class="icon-btn red" onclick="delPatient('${p.id}')">🗑</button>
       </div>`;
-
       if(exp){
-        h+=`<div class="detail-panel" style="margin-bottom:8px">
-          <div style="padding:10px 12px">`;
-        if(!pvs.length){
+        h+=`<div class="detail-panel" style="margin-bottom:8px"><div style="padding:10px 12px">`;
+        if(!pvsArr.length){
           h+=`<p style="font-size:13px;color:var(--text-muted)">ยังไม่มีประวัติการประเมิน</p>`;
         } else {
           h+=`<div class="timeline">`;
-          pvs.slice().reverse().forEach(v=>{
+          pvsArr.slice().reverse().forEach(v=>{
             h+=`<div class="tl-item">
               <div class="tl-date">${fmtDate(v.date)} เวลา ${v.time}</div>
-              <div class="tl-score">คะแนน ${v.total}/10 <span class="badge ${sc(v.total)}">${v.pct}%</span>
-                ${v.nextDate?`<span style="font-size:12px;color:var(--text-muted);margin-left:6px">· นัดถัดไป ${fmtDate(v.nextDate)}</span>`:''}
-              </div>
+              <div class="tl-score">คะแนน ${v.total}/10 <span class="badge ${scClass(v.total)}">${v.pct}%</span></div>
               <div class="tl-items">
                 ${ITEMS.map((_,i)=>`<span class="tl-dot" style="background:${v.scores[i]?'var(--teal-light)':'var(--red-light)'};color:${v.scores[i]?'var(--teal-deep)':'var(--red-dark)'}">${i+1}${v.scores[i]?'✓':'✗'}</span>`).join('')}
               </div>
@@ -463,12 +501,10 @@ function renderPatients(){
           });
           h+=`</div>`;
         }
-        h+=`</div>
-          <div style="padding:8px 12px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap">
-            <button class="nav-btn" onclick="goAssess('${p.id}')">+ ประเมินครั้งใหม่</button>
-            <button class="nav-btn" onclick="exportPatCSV('${p.id}')">⬇ Export CSV</button>
-          </div>
-        </div>`;
+        h+=`</div><div style="padding:8px 12px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap">
+          <button class="nav-btn" onclick="goAssess('${p.id}')">+ ประเมินครั้งใหม่</button>
+          <button class="nav-btn" onclick="exportPatCSV('${p.id}')">⬇ Export CSV</button>
+        </div></div>`;
       }
     });
     h+=`</div>`;
@@ -478,93 +514,90 @@ function renderPatients(){
     <button class="nav-btn" style="color:var(--red-mid);border-color:rgba(226,75,74,.3)" onclick="delAllData()">🗑 ลบข้อมูลทั้งหมด</button>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="nav-btn" onclick="exportAllCSV()">⬇ Export CSV</button>
-      <button class="nav-btn" onclick="backupJSON()" title="สำรองข้อมูลเป็นไฟล์ JSON">💾 สำรองข้อมูล</button>
-      <button class="nav-btn" onclick="document.getElementById('import-file').click()" title="นำเข้าข้อมูลจากไฟล์ JSON">📂 นำเข้าข้อมูล</button>
+      <button class="nav-btn" onclick="backupJSON()">💾 สำรองข้อมูล</button>
+      <button class="nav-btn" onclick="document.getElementById('imp').click()">📂 นำเข้าข้อมูล</button>
     </div>
   </div>
-  <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSON(this)">`;
-
-  const pCount=getPatients().length, vCount=getVisits().length;
-  h+=`<div style="margin-top:10px;padding:8px 12px;background:var(--gray-bg);border-radius:var(--radius-sm);font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:6px">
-    <span>💾</span>
-    <span>ข้อมูลที่บันทึกอยู่: ผู้ป่วย <strong>${pCount}</strong> ราย · ประเมิน <strong>${vCount}</strong> ครั้ง · อัปเดตล่าสุด ${new Date().toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'})}</span>
-  </div>`;
+  <input type="file" id="imp" accept=".json" style="display:none" onchange="importJSON(this)">`;
 
   document.getElementById('view-patients').innerHTML=h;
 }
 
-function goAssess(id){showTab('assess');pickPatient(id)}
+async function goAssess(id){
+  showTab('assess');
+  await pickPatient(id);
+}
 
-function delPatient(id){
-  const p=getPatients().find(x=>x.id===id);if(!p)return;
-  const n=getVisits().filter(v=>v.patientId===id).length;
-  showModal(`ต้องการลบ "${p.name}" และประวัติทั้งหมด ${n} ครั้งใช่หรือไม่?`,()=>{
-    savePatients(getPatients().filter(x=>x.id!==id));
-    saveVisits(getVisits().filter(v=>v.patientId!==id));
-    expPatient=null;renderPatients();showToast(`ลบ ${p.name} แล้ว`);
+async function delPatient(id){
+  const patients=await getPatients();
+  const p=patients.find(x=>x.id===id);if(!p)return;
+  const visits=await getVisits();
+  const n=visits.filter(v=>v.patientId===id).length;
+  showModal(`ต้องการลบ "${p.name}" และประวัติทั้งหมด ${n} ครั้งใช่หรือไม่?`,async()=>{
+    await savePatients(patients.filter(x=>x.id!==id));
+    await saveVisits(visits.filter(v=>v.patientId!==id));
+    expPatient=null;await renderPatients();showToast(`ลบ ${p.name} แล้ว`);
   });
 }
 
-function delAllData(){
-  const n=getPatients().length;
-  showModal(`ต้องการลบข้อมูลผู้ป่วยทั้งหมด ${n} รายและประวัติทั้งหมดใช่หรือไม่?`,()=>{
-    savePatients([]);saveVisits([]);expPatient=null;renderPatients();showToast('ลบข้อมูลทั้งหมดแล้ว');
+async function delAllData(){
+  const n=(await getPatients()).length;
+  showModal(`ต้องการลบข้อมูลผู้ป่วยทั้งหมด ${n} ราย และประวัติทั้งหมดใช่หรือไม่?`,async()=>{
+    await savePatients([]);await saveVisits([]);expPatient=null;await renderPatients();showToast('ลบข้อมูลทั้งหมดแล้ว');
   });
 }
 
-function exportPatCSV(id){
-  const p=getPatients().find(x=>x.id===id);if(!p)return;
-  const vs=patientVisits(id);
-  const hdr=['HN','ชื่อ','อายุ','วันที่','เวลา','คะแนน','ร้อยละ','นัดครั้งถัดไป',...ITEMS.map((_,i)=>`ข้อ${i+1}`)];
-  const rows=vs.map(v=>[p.hn,p.name,p.age,v.date,v.time,v.total,v.pct+'%',v.nextDate||'',...v.scores.map(s=>s?'1':'0')]);
-  dlCSV(rows,hdr,`mdi_${p.hn}`);
-}
-
-function exportAllCSV(){
-  const pts=getPatients(),vs=getVisits();
-  const hdr=['HN','ชื่อ','อายุ','วันที่','เวลา','คะแนน','ร้อยละ','นัดครั้งถัดไป',...ITEMS.map((_,i)=>`ข้อ${i+1}`)];
-  const rows=vs.map(v=>{
-    const p=pts.find(x=>x.id===v.patientId)||{hn:'-',name:'-',age:'-'};
-    return[p.hn,p.name,p.age,v.date,v.time,v.total,v.pct+'%',v.nextDate||'',...v.scores.map(s=>s?'1':'0')];
-  });
-  dlCSV(rows,hdr,'mdi_all');
-}
-
-function backupJSON(){
-  const data={patients:getPatients(),visits:getVisits(),exportedAt:new Date().toISOString()};
-  const json=JSON.stringify(data,null,2);
+async function backupJSON(){
+  const data={patients:await getPatients(),visits:await getVisits(),exportedAt:new Date().toISOString()};
   const a=document.createElement('a');
-  const date=todayISO();
-  a.href=URL.createObjectURL(new Blob([json],{type:'application/json'}));
-  a.download=`mdi_backup_${date}.json`;a.click();
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  a.download=`mdi_backup_${todayISO()}.json`;a.click();
   showToast('สำรองข้อมูลเรียบร้อย');
 }
 
-function importJSON(input){
+async function importJSON(input){
   const file=input.files[0];if(!file)return;
   const reader=new FileReader();
-  reader.onload=function(e){
+  reader.onload=async function(e){
     try{
       const data=JSON.parse(e.target.result);
       if(!data.patients||!data.visits){showToast('ไฟล์ไม่ถูกต้อง');return}
-      showModal(`นำเข้าข้อมูล ${data.patients.length} ราย และ ${data.visits.length} ครั้ง\n(จะรวมกับข้อมูลที่มีอยู่ หาก HN ซ้ำจะข้ามไป)`,()=>{
-        // merge patients — skip duplicates by id
-        const existing=getPatients();
-        const existIds=new Set(existing.map(p=>p.id));
-        const newPts=data.patients.filter(p=>!existIds.has(p.id));
-        savePatients([...existing,...newPts]);
-        // merge visits — skip duplicates by id
-        const existV=getVisits();
-        const existVIds=new Set(existV.map(v=>v.id));
-        const newV=data.visits.filter(v=>!existVIds.has(v.id));
-        saveVisits([...existV,...newV]);
-        expPatient=null;renderPatients();
-        showToast(`นำเข้าแล้ว: ผู้ป่วยใหม่ ${newPts.length} ราย · ประเมินใหม่ ${newV.length} ครั้ง`);
+      showModal(`นำเข้า ${data.patients.length} ราย และ ${data.visits.length} ครั้ง\n(จะรวมกับข้อมูลที่มีอยู่ ไม่ลบทับ)`,async()=>{
+        const ep=await getPatients();
+        const eids=new Set(ep.map(p=>p.id));
+        const np=data.patients.filter(p=>!eids.has(p.id));
+        await savePatients([...ep,...np]);
+        const ev=await getVisits();
+        const evids=new Set(ev.map(v=>v.id));
+        const nv=data.visits.filter(v=>!evids.has(v.id));
+        await saveVisits([...ev,...nv]);
+        expPatient=null;await renderPatients();
+        showToast(`นำเข้าแล้ว: ผู้ป่วยใหม่ ${np.length} ราย · ประเมินใหม่ ${nv.length} ครั้ง`);
       });
     }catch{showToast('อ่านไฟล์ไม่ได้ กรุณาตรวจสอบไฟล์');}
     input.value='';
   };
   reader.readAsText(file);
+}
+
+async function exportPatCSV(id){
+  const patients=await getPatients();
+  const p=patients.find(x=>x.id===id);if(!p)return;
+  const visits=await getVisits();
+  const pvsArr=pvs(visits,id);
+  const hdr=['HN','ชื่อ','อายุ','วันที่','เวลา','คะแนน','ร้อยละ',...ITEMS.map((_,i)=>`ข้อ${i+1}`)];
+  const rows=pvsArr.map(v=>[p.hn,p.name,p.age,v.date,v.time,v.total,v.pct+'%',...v.scores.map(s=>s?'1':'0')]);
+  dlCSV(rows,hdr,`mdi_${p.hn}`);
+}
+
+async function exportAllCSV(){
+  const patients=await getPatients(),visits=await getVisits();
+  const hdr=['HN','ชื่อ','อายุ','วันที่','เวลา','คะแนน','ร้อยละ',...ITEMS.map((_,i)=>`ข้อ${i+1}`)];
+  const rows=visits.map(v=>{
+    const p=patients.find(x=>x.id===v.patientId)||{hn:'-',name:'-',age:'-'};
+    return[p.hn,p.name,p.age,v.date,v.time,v.total,v.pct+'%',...v.scores.map(s=>s?'1':'0')];
+  });
+  dlCSV(rows,hdr,'mdi_all');
 }
 
 function dlCSV(rows,hdr,fn){
@@ -575,11 +608,12 @@ function dlCSV(rows,hdr,fn){
   a.download=fn+'.csv';a.click();
 }
 
-// ══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // TAB 3 — สรุปรายวัน
-// ══════════════════════════════════════════════════════════════
-function renderDaily(){
-  const pts=getPatients(),allV=getVisits();
+// ══════════════════════════════════════════════════════════
+async function renderDaily(){
+  setLoading('view-daily');
+  const patients=await getPatients(),allV=await getVisits();
   const isToday=viewDate===todayISO();
   const dayV=allV.filter(v=>v.date===viewDate);
   const n=dayV.length;
@@ -604,15 +638,15 @@ function renderDaily(){
   } else {
     h+=`<div class="card">`;
     dayV.slice().reverse().forEach(v=>{
-      const p=pts.find(x=>x.id===v.patientId)||{name:'-',hn:'-',age:'-'};
+      const p=patients.find(x=>x.id===v.patientId)||{name:'-',hn:'-',age:'-'};
       const exp=expVisit===v.id;
       h+=`<div class="record-row">
         <div class="record-info">
           <div class="record-name">${esc(p.name)}${p.age!=='-'?` (${p.age} ปี)`:''}</div>
-          <div class="record-sub">HN: ${esc(p.hn)} · ${v.time}${v.nextDate?` · นัด ${fmtDate(v.nextDate)}`:''}</div>
+          <div class="record-sub">HN: ${esc(p.hn)} · ${v.time}</div>
         </div>
-        <span class="badge ${sc(v.total)}">${v.total}/10</span>
-        <span class="badge ${sc(v.total)}">${v.pct}%</span>
+        <span class="badge ${scClass(v.total)}">${v.total}/10</span>
+        <span class="badge ${scClass(v.total)}">${v.pct}%</span>
         <button class="icon-btn" onclick="expVisit=expVisit==='${v.id}'?null:'${v.id}';renderDaily()">${exp?'▲':'▼'}</button>
         <button class="icon-btn red" onclick="delVisit('${v.id}')">🗑</button>
       </div>`;
@@ -647,17 +681,19 @@ function renderDaily(){
   document.getElementById('view-daily').innerHTML=h;
 }
 
-function delVisit(id){
-  showModal('ต้องการลบรายการนี้ใช่หรือไม่?',()=>{
-    saveVisits(getVisits().filter(v=>v.id!==id));
-    expVisit=null;renderDaily();showToast('ลบรายการแล้ว');
+async function delVisit(id){
+  showModal('ต้องการลบรายการนี้ใช่หรือไม่?',async()=>{
+    const visits=await getVisits();
+    await saveVisits(visits.filter(v=>v.id!==id));
+    expVisit=null;await renderDaily();showToast('ลบรายการแล้ว');
   });
 }
-function delDayAll(){
-  const n=getVisits().filter(v=>v.date===viewDate).length;
-  showModal(`ต้องการลบข้อมูลทั้งหมด ${n} รายการของวันที่ ${fmtDate(viewDate)} ใช่หรือไม่?`,()=>{
-    saveVisits(getVisits().filter(v=>v.date!==viewDate));
-    expVisit=null;renderDaily();showToast(`ลบ ${n} รายการแล้ว`);
+async function delDayAll(){
+  const visits=await getVisits();
+  const n=visits.filter(v=>v.date===viewDate).length;
+  showModal(`ต้องการลบข้อมูลทั้งหมด ${n} รายการของวันที่ ${fmtDate(viewDate)} ใช่หรือไม่?`,async()=>{
+    await saveVisits(visits.filter(v=>v.date!==viewDate));
+    expVisit=null;await renderDaily();showToast(`ลบ ${n} รายการแล้ว`);
   });
 }
 function changeDate(d){
@@ -666,17 +702,18 @@ function changeDate(d){
   if(s>todayISO())return;
   viewDate=s;expVisit=null;renderDaily();
 }
-function exportDayCSV(){
-  const pts=getPatients(),vs=getVisits().filter(v=>v.date===viewDate);
-  const hdr=['HN','ชื่อ','อายุ','วันที่','เวลา','คะแนน','ร้อยละ','นัดครั้งถัดไป',...ITEMS.map((_,i)=>`ข้อ${i+1}`)];
-  const rows=vs.map(v=>{
-    const p=pts.find(x=>x.id===v.patientId)||{hn:'-',name:'-',age:'-'};
-    return[p.hn,p.name,p.age,v.date,v.time,v.total,v.pct+'%',v.nextDate||'',...v.scores.map(s=>s?'1':'0')];
+async function exportDayCSV(){
+  const patients=await getPatients(),visits=await getVisits();
+  const dayV=visits.filter(v=>v.date===viewDate);
+  const hdr=['HN','ชื่อ','อายุ','วันที่','เวลา','คะแนน','ร้อยละ',...ITEMS.map((_,i)=>`ข้อ${i+1}`)];
+  const rows=dayV.map(v=>{
+    const p=patients.find(x=>x.id===v.patientId)||{hn:'-',name:'-',age:'-'};
+    return[p.hn,p.name,p.age,v.date,v.time,v.total,v.pct+'%',...v.scores.map(s=>s?'1':'0')];
   });
   dlCSV(rows,hdr,'mdi_daily_'+viewDate);
 }
 
-// ── tab switch ───────────────────────────────────────────────
+// ── tab switch ───────────────────────────────────────────
 function showTab(tab){
   ['assess','patients','daily'].forEach(t=>{
     document.getElementById('tab-'+t).className='tab'+(t===tab?' active':'');
@@ -687,6 +724,8 @@ function showTab(tab){
   else if(tab==='daily')renderDaily();
 }
 
+// ── init ─────────────────────────────────────────────────
+initFirebase();
 renderAssess();
 </script>
 </body>
