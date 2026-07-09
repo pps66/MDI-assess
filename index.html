@@ -476,7 +476,18 @@ function renderPatients(){
 
   h+=`<div style="display:flex;justify-content:space-between;align-items:center;margin-top:.75rem;flex-wrap:wrap;gap:8px">
     <button class="nav-btn" style="color:var(--red-mid);border-color:rgba(226,75,74,.3)" onclick="delAllData()">🗑 ลบข้อมูลทั้งหมด</button>
-    <button class="nav-btn" onclick="exportAllCSV()">⬇ Export ทั้งหมด (CSV)</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="nav-btn" onclick="exportAllCSV()">⬇ Export CSV</button>
+      <button class="nav-btn" onclick="backupJSON()" title="สำรองข้อมูลเป็นไฟล์ JSON">💾 สำรองข้อมูล</button>
+      <button class="nav-btn" onclick="document.getElementById('import-file').click()" title="นำเข้าข้อมูลจากไฟล์ JSON">📂 นำเข้าข้อมูล</button>
+    </div>
+  </div>
+  <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSON(this)">`;
+
+  const pCount=getPatients().length, vCount=getVisits().length;
+  h+=`<div style="margin-top:10px;padding:8px 12px;background:var(--gray-bg);border-radius:var(--radius-sm);font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:6px">
+    <span>💾</span>
+    <span>ข้อมูลที่บันทึกอยู่: ผู้ป่วย <strong>${pCount}</strong> ราย · ประเมิน <strong>${vCount}</strong> ครั้ง · อัปเดตล่าสุด ${new Date().toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'})}</span>
   </div>`;
 
   document.getElementById('view-patients').innerHTML=h;
@@ -517,6 +528,43 @@ function exportAllCSV(){
     return[p.hn,p.name,p.age,v.date,v.time,v.total,v.pct+'%',v.nextDate||'',...v.scores.map(s=>s?'1':'0')];
   });
   dlCSV(rows,hdr,'mdi_all');
+}
+
+function backupJSON(){
+  const data={patients:getPatients(),visits:getVisits(),exportedAt:new Date().toISOString()};
+  const json=JSON.stringify(data,null,2);
+  const a=document.createElement('a');
+  const date=todayISO();
+  a.href=URL.createObjectURL(new Blob([json],{type:'application/json'}));
+  a.download=`mdi_backup_${date}.json`;a.click();
+  showToast('สำรองข้อมูลเรียบร้อย');
+}
+
+function importJSON(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.patients||!data.visits){showToast('ไฟล์ไม่ถูกต้อง');return}
+      showModal(`นำเข้าข้อมูล ${data.patients.length} ราย และ ${data.visits.length} ครั้ง\n(จะรวมกับข้อมูลที่มีอยู่ หาก HN ซ้ำจะข้ามไป)`,()=>{
+        // merge patients — skip duplicates by id
+        const existing=getPatients();
+        const existIds=new Set(existing.map(p=>p.id));
+        const newPts=data.patients.filter(p=>!existIds.has(p.id));
+        savePatients([...existing,...newPts]);
+        // merge visits — skip duplicates by id
+        const existV=getVisits();
+        const existVIds=new Set(existV.map(v=>v.id));
+        const newV=data.visits.filter(v=>!existVIds.has(v.id));
+        saveVisits([...existV,...newV]);
+        expPatient=null;renderPatients();
+        showToast(`นำเข้าแล้ว: ผู้ป่วยใหม่ ${newPts.length} ราย · ประเมินใหม่ ${newV.length} ครั้ง`);
+      });
+    }catch{showToast('อ่านไฟล์ไม่ได้ กรุณาตรวจสอบไฟล์');}
+    input.value='';
+  };
+  reader.readAsText(file);
 }
 
 function dlCSV(rows,hdr,fn){
