@@ -151,11 +151,13 @@ header p{font-size:12px;color:var(--text-muted);margin-top:1px}
     <button class="tab active" id="tab-assess" onclick="showTab('assess')">บันทึกการประเมิน</button>
     <button class="tab" id="tab-patients" onclick="showTab('patients')">ประวัติผู้ป่วย</button>
     <button class="tab" id="tab-daily" onclick="showTab('daily')">สรุปรายวัน</button>
+    <button class="tab" id="tab-fiscal" onclick="showTab('fiscal')">สรุปปีงบ</button>
   </div>
 
   <div id="view-assess"></div>
   <div id="view-patients" style="display:none"></div>
   <div id="view-daily" style="display:none"></div>
+  <div id="view-fiscal" style="display:none"></div>
 
   <div class="toast" id="toast"></div>
   <div id="modal-overlay">
@@ -434,23 +436,7 @@ async function renderPatients(){
   const q=dbQ.toLowerCase();
   const list=q?patients.filter(p=>p.hn.toLowerCase().includes(q)||p.name.toLowerCase().includes(q)):patients;
 
-  const firebase_ok=_useFirebase;
-
-  // setup guide if no firebase
   let h='';
-  if(!firebase_ok){
-    h+=`<div class="setup-card" style="border-color:var(--amber-dark);background:var(--amber-light)">
-      <h2>⚙️ ตั้งค่า Firebase เพื่อให้ข้อมูลไม่หาย</h2>
-      <p>ขณะนี้ข้อมูลเก็บใน browser นี้เท่านั้น ทำตามขั้นตอนนี้ครั้งเดียวเพื่อเก็บข้อมูลบน Cloud ฟรี:</p>
-      <ol>
-        <li>ไปที่ <strong>console.firebase.google.com</strong> → Sign in ด้วย Google</li>
-        <li>กด <strong>Create a project</strong> → ตั้งชื่อ → Continue → Enable Analytics: ไม่ → Create project</li>
-        <li>กด <strong>Realtime Database</strong> (เมนูซ้าย) → Create database → เลือก location ใดก็ได้ → <strong>Start in test mode</strong> → Enable</li>
-        <li>กด ⚙️ <strong>Project settings</strong> (มุมซ้ายบน) → แถบ General → เลื่อนลง → กด <strong>&lt;/&gt;</strong> (Web) → ตั้งชื่อ → Register app</li>
-        <li>คัดลอก <code>firebaseConfig</code> ที่ได้ → เปิดไฟล์ <code>index.html</code> ด้วย Notepad → วางค่าในส่วน <code>FIREBASE_CONFIG</code> → Save → อัปโหลดทับ GitHub</li>
-      </ol>
-    </div>`;
-  }
 
   const dueToday=patients.filter(p=>{const lv=lastV(visits,p.id);return lv&&lv.nextDate===todayISO()});
   const overdue=patients.filter(p=>{const lv=lastV(visits,p.id);return lv&&lv.nextDate<todayISO()});
@@ -713,15 +699,182 @@ async function exportDayCSV(){
   dlCSV(rows,hdr,'mdi_daily_'+viewDate);
 }
 
+// ══════════════════════════════════════════════════════════
+// TAB 4 — สรุปปีงบประมาณ
+// ══════════════════════════════════════════════════════════
+
+// ปีงบ (BE): เดือน ต.ค. ปีก่อน – ก.ย. ปีนี้
+// เช่น ปีงบ 2569 = 1 ต.ค. 2568 – 30 ก.ย. 2569 (CE: 2025-10-01 – 2026-09-30)
+function currentFiscalYear(){
+  const d=new Date(), m=d.getMonth()+1, y=d.getFullYear();
+  return m>=10 ? (y+543+1) : (y+543);
+}
+function fiscalDateRange(fyBE){
+  const ce=fyBE-543;
+  return {start:`${ce-1}-10-01`, end:`${ce}-09-30`};
+}
+function isoToFiscalYear(iso){
+  const[y,m]=iso.split('-').map(Number);
+  return m>=10 ? (y+543+1) : (y+543);
+}
+function fiscalMonthLabel(iso){
+  const[,m]=iso.split('-').map(Number);
+  return MO[m];
+}
+// เรียงลำดับเดือนในปีงบ: ต.ค.(10)...ก.ย.(9)
+function fiscalMonthOrder(m){return m>=10?m-10:m+2}
+
+let fiscalYear=currentFiscalYear();
+
+async function renderFiscal(){
+  setLoading('view-fiscal');
+  const patients=await getPatients(), allV=await getVisits();
+  const {start,end}=fiscalDateRange(fiscalYear);
+  const fyV=allV.filter(v=>v.date>=start&&v.date<=end);
+  const n=fyV.length;
+  const uniquePat=new Set(fyV.map(v=>v.patientId)).size;
+  const avg=n?fyV.reduce((s,v)=>s+v.total,0)/n:0;
+  const avgPct=n?Math.round(avg*10):null;
+  const perfect=fyV.filter(v=>v.total===10).length;
+
+  // ── ปีงบที่มีข้อมูล ──
+  const allFY=[...new Set(allV.map(v=>isoToFiscalYear(v.date)))].sort((a,b)=>b-a);
+  if(!allFY.includes(fiscalYear)) allFY.unshift(fiscalYear);
+
+  let h=`<div class="date-nav" style="margin-bottom:1rem">
+    <button class="nav-btn" onclick="fiscalYear--;renderFiscal()">← ปีก่อน</button>
+    <div style="text-align:center">
+      <div class="date-label">ปีงบประมาณ ${fiscalYear}</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:2px">1 ต.ค. ${fiscalYear-1} – 30 ก.ย. ${fiscalYear}</div>
+    </div>
+    <button class="nav-btn" onclick="fiscalYear++;renderFiscal()" ${fiscalYear>=currentFiscalYear()?'disabled':''}>ปีถัดไป →</button>
+  </div>`;
+
+  // ── metric cards ──
+  h+=`<div class="metric-row" style="grid-template-columns:repeat(2,1fr);margin-bottom:.75rem">
+    <div class="metric"><div class="val">${uniquePat}</div><div class="lbl">ผู้ป่วยที่ได้รับการประเมิน</div></div>
+    <div class="metric"><div class="val">${n}</div><div class="lbl">จำนวนครั้งที่ประเมิน</div></div>
+    <div class="metric"><div class="val">${n?avg.toFixed(1):'-'}</div><div class="lbl">คะแนนเฉลี่ย</div></div>
+    <div class="metric"><div class="val">${avgPct!==null?avgPct+'%':'-'}</div><div class="lbl">ร้อยละการพ่นยาถูกต้อง</div></div>
+  </div>`;
+
+  if(!n){
+    h+=`<div class="empty">ไม่มีข้อมูลในปีงบ ${fiscalYear}</div>`;
+    document.getElementById('view-fiscal').innerHTML=h; return;
+  }
+
+  // ── สรุปรายเดือน ──
+  const monthMap={};
+  fyV.forEach(v=>{
+    const mo=v.date.slice(0,7); // YYYY-MM
+    if(!monthMap[mo]) monthMap[mo]={count:0,total:0,pct:0};
+    monthMap[mo].count++;
+    monthMap[mo].total+=v.total;
+    monthMap[mo].pct+=v.pct;
+  });
+  const months=Object.keys(monthMap).sort((a,b)=>{
+    const ma=parseInt(a.split('-')[1]),mb=parseInt(b.split('-')[1]);
+    return fiscalMonthOrder(ma)-fiscalMonthOrder(mb);
+  });
+
+  h+=`<div class="card"><div class="section-label">สรุปรายเดือน</div>
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr style="border-bottom:1px solid var(--border)">
+          <th style="text-align:left;padding:6px 4px;color:var(--text-muted);font-weight:500">เดือน</th>
+          <th style="text-align:center;padding:6px 4px;color:var(--text-muted);font-weight:500">ราย</th>
+          <th style="text-align:center;padding:6px 4px;color:var(--text-muted);font-weight:500">คะแนนเฉลี่ย</th>
+          <th style="text-align:center;padding:6px 4px;color:var(--text-muted);font-weight:500">ร้อยละ</th>
+          <th style="text-align:left;padding:6px 4px;color:var(--text-muted);font-weight:500">กราฟ</th>
+        </tr>
+      </thead>
+      <tbody>`;
+  months.forEach(mo=>{
+    const d=monthMap[mo];
+    const avgMo=(d.total/d.count).toFixed(1);
+    const pctMo=Math.round(d.pct/d.count);
+    const[y,m]=mo.split('-').map(Number);
+    const label=`${MO[m]} ${y+543}`;
+    const barColor=pctMo>=80?'var(--teal)':pctMo>=50?'#F5A623':'var(--red-mid)';
+    h+=`<tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:7px 4px">${label}</td>
+      <td style="text-align:center;padding:7px 4px">${d.count}</td>
+      <td style="text-align:center;padding:7px 4px">${avgMo}</td>
+      <td style="text-align:center;padding:7px 4px"><span class="badge ${pctMo>=80?'hi':pctMo>=50?'mid':'lo'}">${pctMo}%</span></td>
+      <td style="padding:7px 4px;min-width:80px">
+        <div style="height:5px;background:#eee;border-radius:99px;overflow:hidden">
+          <div style="height:100%;width:${pctMo}%;background:${barColor};border-radius:99px"></div>
+        </div>
+      </td>
+    </tr>`;
+  });
+  h+=`</tbody></table></div>`;
+
+  // ── ข้อที่ทำผิดบ่อยสุด ──
+  const pr=ITEMS.map((_,i)=>({i,pct:Math.round(fyV.filter(v=>v.scores[i]).length/n*100)})).sort((a,b)=>a.pct-b.pct).slice(0,5);
+  h+=`<div class="card"><div class="section-label">5 ข้อที่ทำผิดบ่อยที่สุดในปีงบ ${fiscalYear}</div>`;
+  pr.forEach((w,rank)=>{
+    h+=`<div style="margin-bottom:12px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:12px;font-weight:600;color:var(--text-muted);min-width:18px">${rank+1}</span>
+      <div style="flex:1">
+        <div style="font-size:13px;margin-bottom:4px;line-height:1.4">${w.i+1}. ${ITEMS[w.i]}</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="worst-bar-bg"><div class="worst-bar-fill" style="width:${w.pct}%"></div></div>
+          <span style="font-size:12px;color:var(--text-muted);min-width:52px">ทำได้ ${w.pct}%</span>
+        </div>
+      </div>
+    </div>`;
+  });
+  h+=`</div>`;
+
+  // ── รายชื่อผู้ป่วยในปีงบนี้ ──
+  const patIds=[...new Set(fyV.map(v=>v.patientId))];
+  h+=`<div class="card"><div class="section-label">รายชื่อผู้ป่วยในปีงบ ${fiscalYear} (${patIds.length} ราย)</div>`;
+  patIds.forEach(pid=>{
+    const p=patients.find(x=>x.id===pid)||{name:'-',hn:'-',age:'-'};
+    const pVisits=fyV.filter(v=>v.patientId===pid).sort((a,b)=>a.date.localeCompare(b.date));
+    const avgP=pVisits.reduce((s,v)=>s+v.total,0)/pVisits.length;
+    const avgPctP=Math.round(avgP*10);
+    h+=`<div class="record-row">
+      <div class="record-info">
+        <div class="record-name">${esc(p.name)}</div>
+        <div class="record-sub">HN: ${esc(p.hn)} · ${pVisits.length} ครั้ง · ครั้งแรก ${fmtDate(pVisits[0].date)} · ล่าสุด ${fmtDate(pVisits[pVisits.length-1].date)}</div>
+      </div>
+      <span class="badge ${scClass(Math.round(avgP))}">${avgPctP}%</span>
+    </div>`;
+  });
+  h+=`</div>`;
+
+  // ── export ──
+  h+=`<div style="text-align:right;margin-top:.5rem">
+    <button class="nav-btn" onclick="exportFiscalCSV()">⬇ Export CSV ปีงบ ${fiscalYear}</button>
+  </div>`;
+
+  document.getElementById('view-fiscal').innerHTML=h;
+}
+
+async function exportFiscalCSV(){
+  const patients=await getPatients(), allV=await getVisits();
+  const {start,end}=fiscalDateRange(fiscalYear);
+  const fyV=allV.filter(v=>v.date>=start&&v.date<=end);
+  const hdr=['ปีงบ','HN','ชื่อ','อายุ','วันที่','เวลา','คะแนน','ร้อยละ',...ITEMS.map((_,i)=>`ข้อ${i+1}`)];
+  const rows=fyV.map(v=>{
+    const p=patients.find(x=>x.id===v.patientId)||{hn:'-',name:'-',age:'-'};
+    return[fiscalYear,p.hn,p.name,p.age,v.date,v.time,v.total,v.pct+'%',...v.scores.map(s=>s?'1':'0')];
+  });
+  dlCSV(rows,hdr,`mdi_fiscal_${fiscalYear}`);
+}
+
 // ── tab switch ───────────────────────────────────────────
 function showTab(tab){
-  ['assess','patients','daily'].forEach(t=>{
+  ['assess','patients','daily','fiscal'].forEach(t=>{
     document.getElementById('tab-'+t).className='tab'+(t===tab?' active':'');
     document.getElementById('view-'+t).style.display=t===tab?'':'none';
   });
   if(tab==='assess')renderAssess();
   else if(tab==='patients')renderPatients();
   else if(tab==='daily')renderDaily();
+  else if(tab==='fiscal')renderFiscal();
 }
 
 // ── init ─────────────────────────────────────────────────
