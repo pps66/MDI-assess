@@ -649,7 +649,7 @@ async function renderDaily(){
   const n=dayV.length;
   const avg=n?dayV.reduce((s,v)=>s+v.total,0)/n:0;
   const perfect=dayV.filter(v=>v.total===10).length;
-  const avgPct=n?Math.round((perfect/n)*100):null;
+  const avgPct=n?Math.round((perfect/n)*1000)/10:null;
 
   let h=`<div class="date-nav">
     <button class="nav-btn" onclick="changeDate(-1)">← วันก่อน</button>
@@ -659,7 +659,7 @@ async function renderDaily(){
   <div class="metric-row">
     <div class="metric"><div class="val">${n}</div><div class="lbl">ผู้ป่วยทั้งหมด</div></div>
     <div class="metric"><div class="val">${n?avg.toFixed(1):'-'}</div><div class="lbl">คะแนนเฉลี่ย</div></div>
-    <div class="metric"><div class="val">${avgPct!==null?avgPct+'%':'-'}</div><div class="lbl">ร้อยละการพ่นยาถูกต้อง</div></div>
+    <div class="metric"><div class="val">${avgPct!==null?avgPct.toFixed(1)+'%':'-'}</div><div class="lbl">ร้อยละการพ่นยาถูกต้อง</div></div>
     <div class="metric"><div class="val">${perfect}</div><div class="lbl">ได้ 10/10</div></div>
   </div>`;
 
@@ -779,7 +779,7 @@ async function renderFiscal(){
   const uniquePat=new Set(fyV.map(v=>v.patientId)).size;
   const avg=n?fyV.reduce((s,v)=>s+v.total,0)/n:0;
   const perfect=fyV.filter(v=>v.total===10).length;
-  const avgPct=n?Math.round((perfect/n)*100):null;
+  const avgPct=n?Math.round((perfect/n)*1000)/10:null;
 
   // ── ปีงบที่มีข้อมูล ──
   const allFY=[...new Set(allV.map(v=>isoToFiscalYear(v.date)))].sort((a,b)=>b-a);
@@ -799,7 +799,7 @@ async function renderFiscal(){
     <div class="metric"><div class="val">${uniquePat}</div><div class="lbl">ผู้ป่วยที่ได้รับการประเมิน</div></div>
     <div class="metric"><div class="val">${n}</div><div class="lbl">จำนวนครั้งที่ประเมิน</div></div>
     <div class="metric"><div class="val">${n?avg.toFixed(1):'-'}</div><div class="lbl">คะแนนเฉลี่ย</div></div>
-    <div class="metric"><div class="val">${avgPct!==null?avgPct+'%':'-'}</div><div class="lbl">ร้อยละการพ่นยาถูกต้อง</div></div>
+    <div class="metric"><div class="val">${avgPct!==null?avgPct.toFixed(1)+'%':'-'}</div><div class="lbl">ร้อยละการพ่นยาถูกต้อง</div></div>
   </div>`;
 
   if(!n){
