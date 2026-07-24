@@ -224,14 +224,15 @@ header p{font-size:12px;color:var(--text-muted);margin-top:2px;font-weight:300}
 // ║  ⚙️  วาง Firebase Config ที่นี่                         ║
 // ║  ดูวิธีตั้งค่าในแท็บ "ประวัติผู้ป่วย"                  ║
 // ╚══════════════════════════════════════════════════════════╝
-const FIREBASE_CONFIG = {apiKey: "AIzaSyBowDY6_K5INpVOjvhImDitftX0GnXHvgo",
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBowDY6_K5INpVOjvhImDitftX0GnXHvgo",
   authDomain: "mdi-assess.firebaseapp.com",
   databaseURL: "https://mdi-assess-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "mdi-assess",
   storageBucket: "mdi-assess.firebasestorage.app",
   messagingSenderId: "1050906512605",
   appId: "1:1050906512605:web:5e4ba33260d37cebc11f34",
-  measurementId: "G-KGP750QP7N" 
+  measurementId: "G-KGP750QP7N"
 };
 // ════════════════════════════════════════════════════════════
 
@@ -647,8 +648,8 @@ async function renderDaily(){
   const dayV=allV.filter(v=>v.date===viewDate);
   const n=dayV.length;
   const avg=n?dayV.reduce((s,v)=>s+v.total,0)/n:0;
-  const avgPct=n?Math.round(avg*10):null;
   const perfect=dayV.filter(v=>v.total===10).length;
+  const avgPct=n?Math.round((perfect/n)*100):null;
 
   let h=`<div class="date-nav">
     <button class="nav-btn" onclick="changeDate(-1)">← วันก่อน</button>
@@ -777,8 +778,8 @@ async function renderFiscal(){
   const n=fyV.length;
   const uniquePat=new Set(fyV.map(v=>v.patientId)).size;
   const avg=n?fyV.reduce((s,v)=>s+v.total,0)/n:0;
-  const avgPct=n?Math.round(avg*10):null;
   const perfect=fyV.filter(v=>v.total===10).length;
+  const avgPct=n?Math.round((perfect/n)*100):null;
 
   // ── ปีงบที่มีข้อมูล ──
   const allFY=[...new Set(allV.map(v=>isoToFiscalYear(v.date)))].sort((a,b)=>b-a);
