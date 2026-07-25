@@ -810,11 +810,11 @@ async function renderFiscal(){
   // ── สรุปรายเดือน ──
   const monthMap={};
   fyV.forEach(v=>{
-    const mo=v.date.slice(0,7); // YYYY-MM
-    if(!monthMap[mo]) monthMap[mo]={count:0,total:0,pct:0};
+    const mo=v.date.slice(0,7);
+    if(!monthMap[mo]) monthMap[mo]={count:0,total:0,perfect:0};
     monthMap[mo].count++;
     monthMap[mo].total+=v.total;
-    monthMap[mo].pct+=v.pct;
+    if(v.total===10) monthMap[mo].perfect++;
   });
   const months=Object.keys(monthMap).sort((a,b)=>{
     const ma=parseInt(a.split('-')[1]),mb=parseInt(b.split('-')[1]);
@@ -828,7 +828,7 @@ async function renderFiscal(){
           <th style="text-align:left;padding:6px 4px;color:var(--text-muted);font-weight:500">เดือน</th>
           <th style="text-align:center;padding:6px 4px;color:var(--text-muted);font-weight:500">ราย</th>
           <th style="text-align:center;padding:6px 4px;color:var(--text-muted);font-weight:500">คะแนนเฉลี่ย</th>
-          <th style="text-align:center;padding:6px 4px;color:var(--text-muted);font-weight:500">ร้อยละ</th>
+          <th style="text-align:center;padding:6px 4px;color:var(--text-muted);font-weight:500">ร้อยละการพ่นยาถูกต้อง</th>
           <th style="text-align:left;padding:6px 4px;color:var(--text-muted);font-weight:500">กราฟ</th>
         </tr>
       </thead>
@@ -836,15 +836,15 @@ async function renderFiscal(){
   months.forEach(mo=>{
     const d=monthMap[mo];
     const avgMo=(d.total/d.count).toFixed(1);
-    const pctMo=Math.round(d.pct/d.count);
+    const pctMo=Math.round((d.perfect/d.count)*1000)/10;
     const[y,m]=mo.split('-').map(Number);
     const label=`${MO[m]} ${y+543}`;
-    const barColor=pctMo>=80?'var(--teal)':pctMo>=50?'#F5A623':'var(--red-mid)';
+    const barColor=pctMo>=80?'var(--p)':pctMo>=50?'#F5A623':'var(--r-mid)';
     h+=`<tr style="border-bottom:1px solid var(--border)">
       <td style="padding:7px 4px">${label}</td>
       <td style="text-align:center;padding:7px 4px">${d.count}</td>
       <td style="text-align:center;padding:7px 4px">${avgMo}</td>
-      <td style="text-align:center;padding:7px 4px"><span class="badge ${pctMo>=80?'hi':pctMo>=50?'mid':'lo'}">${pctMo}%</span></td>
+      <td style="text-align:center;padding:7px 4px"><span class="badge ${pctMo>=80?'hi':pctMo>=50?'mid':'lo'}">${pctMo.toFixed(1)}%</span></td>
       <td style="padding:7px 4px;min-width:80px">
         <div style="height:5px;background:#eee;border-radius:99px;overflow:hidden">
           <div style="height:100%;width:${pctMo}%;background:${barColor};border-radius:99px"></div>
